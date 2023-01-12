@@ -49,5 +49,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://spotify-interactive.vercel.app/"
+  "homepage": "https://spotify-interactive.vercel.app/",
+  "engines": {
+    "node": "^12.22.0 || ^14.17.0 || >= 16.0.0"
+  }
 }
