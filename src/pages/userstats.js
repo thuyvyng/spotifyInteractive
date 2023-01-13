@@ -48,6 +48,7 @@ export default function UserStats() {
       width: 100%;
       text-align: center;
       color: black;
+      margin: 2px;
     }
     .cards-container {
       padding-left: 1%;
@@ -67,7 +68,7 @@ export default function UserStats() {
       color: white;
     }
     #cat-container {
-      width: 50%;
+      width: 90%;
       height: 100%;
       margin: auto;
     }
@@ -231,7 +232,7 @@ export default function UserStats() {
     return topArtists.items.slice(0, 10).map((artist) => {
       if (artist) {
         return (
-          <Col lg={1} md={2} xs={3}>
+          <Col xl={1} lg={2} md={2} xs={6}>
             <Card key={artist.uri} className="card">
               <Card.Img
                 src={
@@ -262,11 +263,11 @@ export default function UserStats() {
     }
     return (
       <Col>
-        <Row>
+        <Row className="centered">
           {topTracks.items.slice(0, 5).map((song) => {
             if (song) {
               return (
-                <Col>
+                <Col xs={12} md={8} lg={2}>
                   <Card
                     key={song.uri}
                     className="card"
@@ -292,11 +293,11 @@ export default function UserStats() {
             }
           })}
         </Row>
-        <Row>
+        <Row className="centered">
           {topTracks.items.slice(5, 10).map((song) => {
             if (song) {
               return (
-                <Col>
+                <Col xs={12} md={8} lg={2}>
                   <Card
                     key={song.uri}
                     className="card"
@@ -470,7 +471,7 @@ export default function UserStats() {
           <Row className="centered">
             {tooltipTitles.slice(0, 3).map((title, i) => {
               return (
-                <Col xs={2}>
+                <Col xs={12} md={4}>
                   <OverlayTrigger
                     placement="bottom"
                     overlay={explanationTooltip(explanations[i])}
@@ -486,7 +487,7 @@ export default function UserStats() {
           <Row className="centered">
             {tooltipTitles.slice(3, 6).map((title, i) => {
               return (
-                <Col xs={2}>
+                <Col xs={12} md={4}>
                   <OverlayTrigger
                     placement="bottom"
                     overlay={explanationTooltip(explanations[i + 3])}
