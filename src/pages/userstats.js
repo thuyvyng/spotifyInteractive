@@ -679,7 +679,7 @@ export default function UserStats() {
       <Container>
         <br></br>
         <Jumbotron style={{ textAlign: "center" }}>
-          <h1 class="display-4">Your Spotify Statistics</h1>
+          <h1 class="display-4">Your Spotify Purrsona</h1>
           <p class="lead">
             Have a cat visualization created based on your spotify data!
           </p>
