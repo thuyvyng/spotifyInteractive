@@ -48,7 +48,6 @@ export default function UserStats() {
       width: 100%;
       text-align: center;
       color: black;
-      margin: 2px;
     }
     .cards-container {
       padding-left: 1%;
@@ -61,7 +60,6 @@ export default function UserStats() {
     }
     .active-button {
       background-color: #3be378;
-      border: 1px #3be378 solid;
       height: 100%;
       width: 100%;
       text-align: center;
@@ -621,7 +619,7 @@ export default function UserStats() {
 
   function displayTimeframeButtons() {
     return (
-      <Col lg={4}>
+      <Col xs={11} md={8} lg={8}>
         <ButtonGroup style={{ width: "100%" }}>
           <OverlayTrigger
             placement="bottom"
