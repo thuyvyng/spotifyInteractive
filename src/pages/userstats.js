@@ -39,14 +39,40 @@ export default function UserStats() {
       margin: 1%;
     }
     .song-image {
-      width: 10%;
+      width: 100%;
       margin: 1%;
       opacity: 0.6;
     }
 
     .song-image-selected {
-      width: 10%;
+      width: 100%;
       margin: 1%;
+      opacity: 1;
+    }
+
+    .imageDiv {
+      width: 100%;
+    }
+
+    .imgCont {
+      position: relative;
+      width: 25%;
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      background: rgb(0, 0, 0);
+      background: rgba(0, 0, 0, 0.5); /* Black see-through */
+      color: #f1f1f1;
+      width: 100%;
+      transition: 0.5s ease;
+      opacity: 0;
+      color: white;
+      text-align: center;
+    }
+
+    .imgCont:hover .overlay {
       opacity: 1;
     }
 
@@ -65,6 +91,9 @@ export default function UserStats() {
       margin: 1% auto;
       text-align: center;
       justify-content: center;
+    }
+    .centeredV {
+      margin: auto 1%;
     }
     .active-button {
       background-color: #3be378;
@@ -296,25 +325,39 @@ export default function UserStats() {
                     style={{ textAlign: "left" }}
                   >
                     <h6>
-                      <img
-                        className={
-                          songPlaying.src === song.preview_url
-                            ? "song-image-selected"
-                            : "song-image"
-                        }
-                        alt=""
-                        src={song.album.images[0].url}
-                        onClick={() => {
-                          playMusic(song);
-                        }}
-                      />
-                      <a
-                        href={song.external_urls.spotify}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {song.name}
-                      </a>
+                      <div style={{ display: "flex" }}>
+                        <div className="imgCont">
+                          <div className="imageDiv">
+                            <img
+                              className={
+                                songPlaying.src === song.preview_url
+                                  ? "song-image-selected"
+                                  : "song-image"
+                              }
+                              alt=""
+                              src={song.album.images[0].url}
+                              onClick={() => {
+                                playMusic(song);
+                              }}
+                            />
+                          </div>
+
+                          <div class="overlay">
+                            {songPlaying.src === song.preview_url
+                              ? "PAUSE"
+                              : "PLAY"}
+                          </div>
+                        </div>
+                        <div class="centeredV">
+                          <a
+                            href={song.external_urls.spotify}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {song.name}
+                          </a>
+                        </div>
+                      </div>
                     </h6>
                   </Card>
                 </Col>
@@ -333,25 +376,39 @@ export default function UserStats() {
                     style={{ textAlign: "left" }}
                   >
                     <h6>
-                      <img
-                        className={
-                          songPlaying.src === song.preview_url
-                            ? "song-image-selected"
-                            : "song-image"
-                        }
-                        alt=""
-                        src={song.album.images[0].url}
-                        onClick={() => {
-                          playMusic(song);
-                        }}
-                      />
-                      <a
-                        href={song.external_urls.spotify}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {song.name}
-                      </a>
+                      <div style={{ display: "flex" }}>
+                        <div className="imgCont">
+                          <div className="imageDiv">
+                            <img
+                              className={
+                                songPlaying.src === song.preview_url
+                                  ? "song-image-selected"
+                                  : "song-image"
+                              }
+                              alt=""
+                              src={song.album.images[0].url}
+                              onClick={() => {
+                                playMusic(song);
+                              }}
+                            />
+                          </div>
+
+                          <div class="overlay">
+                            {songPlaying.src === song.preview_url
+                              ? "PAUSE"
+                              : "PLAY"}
+                          </div>
+                        </div>
+                        <div class="centeredV">
+                          <a
+                            href={song.external_urls.spotify}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {song.name}
+                          </a>
+                        </div>
+                      </div>
                     </h6>
                   </Card>
                 </Col>
