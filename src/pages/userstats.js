@@ -376,8 +376,7 @@ export default function UserStats() {
   function computeCheeksOpacity() {
     let loudnessArray = audioFeatures.map((item) => item.loudness);
     let averageLoudness = average(loudnessArray);
-    console.log(averageLoudness);
-    return (averageLoudness + 65) * (1 / 100);
+    return (averageLoudness + 70) * (1 / 100);
   }
 
   // songs mostly in major key (1) = lighter color, songs mostly in minor key (0) = darker color
@@ -445,7 +444,7 @@ export default function UserStats() {
     const home =
       "Curious about your cat? Learn more by clicking the attributes. ";
     const background =
-      "Color gradient is based on the min, avg, and max energy values of your top 10 songs (purple = high energy, red = low energy)." +
+      "Color gradient is based on the min, avg, and max energy values of your top 10 songs (purple = high energy, red = low energy). Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy." +
       "\nYour min: " +
       minEnergy +
       " avg: " +
@@ -457,8 +456,9 @@ export default function UserStats() {
       audioFeatures.map((item) => item.loudness)
     ).toFixed(2);
     const opacity =
-      " Cheek color is based on the average loudness of your top 10 songs (solid = louder). Your average song loudness: " +
-      -1 * averageOpacity;
+      " Cheek opacity is based on the average loudness of your top 10 songs (solid = louder). Loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks. Loudness is the quality of a sound that is the primary psychological correlate of physical strength (amplitude). Values typically range between -60 and 0 db. Your average song loudness: " +
+      averageOpacity +
+      "dB.";
 
     let averageKey = average(audioFeatures.map((item) => item.valence)).toFixed(
       2
@@ -472,7 +472,7 @@ export default function UserStats() {
       audioFeatures.map((item) => item.valence)
     ).toFixed(2);
     const tongue =
-      "The animation speed is based on the average tempo of your top 10 songs (higher bpm = faster animation). \nYour average song tempo: " +
+      "The animation speed is based on the average tempo of your top 10 songs (higher bpm = faster animation). The overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration. \nYour average song tempo: " +
       averageTempo;
 
     let averageDanceability = average(
@@ -579,7 +579,7 @@ export default function UserStats() {
         display: "inline-block",
         margin: "0px",
         opacity: computeCheeksOpacity(),
-        backgroundColor: "#c23350",
+        backgroundColor: "#ff85a1",
       };
       const rightCheekCss = {
         width: "30px",
@@ -591,7 +591,7 @@ export default function UserStats() {
         display: "inline-block",
         margin: "0px",
         opacity: computeCheeksOpacity(),
-        backgroundColor: "#c23350",
+        backgroundColor: "#ff85a1",
       };
       const tongueCss = {
         position: "relative",
