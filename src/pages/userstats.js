@@ -98,7 +98,7 @@ export default function UserStats() {
       height: 20px;
       border-radius: 50%;
       position: relative;
-      top: 42%;
+      top: 47%;
       left: 25%;
       background-color: black;
       margin: 0px;
@@ -110,7 +110,7 @@ export default function UserStats() {
       height: 20px;
       border-radius: 50%;
       position: relative;
-      top: 43%;
+      top: 48%;
       left: 60%;
       background-color: black;
       margin: 0px;
