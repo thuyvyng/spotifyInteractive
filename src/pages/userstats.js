@@ -88,11 +88,13 @@ export default function UserStats() {
       color: white;
     }
     #cat-container {
+      min-width: 600px;
+      min-height: 800px;
       width: 100%;
       height: 100%;
       margin: 0px;
       padding: 0px;
-      position: relative;
+      position: static;
     }
     #left-eye {
       width: 15px;
