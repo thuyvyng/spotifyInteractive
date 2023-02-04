@@ -92,14 +92,15 @@ export default function UserStats() {
       height: 100%;
       margin: 0px;
       padding: 0px;
+      position: relative;
     }
     #left-eye {
       width: 15px;
       height: 20px;
       border-radius: 50%;
-      position: relative;
-      top: 47%;
-      left: 25%;
+      position: absolute;
+      top: 43%;
+      left: 28%;
       background-color: black;
       margin: 0px;
       display: inline-block;
@@ -109,10 +110,34 @@ export default function UserStats() {
       width: 15px;
       height: 20px;
       border-radius: 50%;
-      position: relative;
-      top: 48%;
-      left: 60%;
+      position: absolute;
+      top: 43%;
+      left: 67%;
       background-color: black;
+      margin: 0px;
+      display: inline-block;
+    }
+    #left-cheek {
+      width: 30px;
+      height: 22px;
+      border-radius: 50%;
+      position: absolute;
+      top: 55%;
+      left: 12%;
+      background-color: pink;
+      margin: 0px;
+      display: inline-block;
+      opacity: 0.7;
+    }
+    #right-cheek {
+      width: 30px;
+      height: 22px;
+      border-radius: 50%;
+      position: absolute;
+      top: 55%;
+      left: 73%;
+      background-color: pink;
+      opacity: 0.7;
       margin: 0px;
       display: inline-block;
     }
@@ -122,9 +147,9 @@ export default function UserStats() {
       border-left: 10px solid transparent;
       border-right: 10px solid transparent;
       border-top: 10px solid #000;
-      position: relative;
-      top: 50%;
-      left: 47%;
+      position: absolute;
+      top: 65%;
+      left: 45%;
     }
     .explanations {
       width: 85%;
@@ -373,10 +398,10 @@ export default function UserStats() {
   }
 
   // background opacity ranges from 0.0 to 1.0, loudness ranges from about -65 to 0 decibels, so 1.0 opacity == loud
-  function computeCheeksOpacity() {
+  function computeBackgroundOpacity() {
     let loudnessArray = audioFeatures.map((item) => item.loudness);
     let averageLoudness = average(loudnessArray);
-    return (averageLoudness + 70) * (1 / 100);
+    return (averageLoudness + 65) * (1 / 65);
   }
 
   // songs mostly in major key (1) = lighter color, songs mostly in minor key (0) = darker color
@@ -426,7 +451,7 @@ export default function UserStats() {
     const tooltipTitles = [
       "*",
       "Background Colors",
-      "Cheeks",
+      "Background Opacity",
       "Color",
       "Tongue",
       "Ears",
@@ -444,7 +469,7 @@ export default function UserStats() {
     const home =
       "Curious about your cat? Learn more by clicking the attributes. ";
     const background =
-      "Color gradient is based on the min, avg, and max energy values of your top 10 songs (purple = high energy, red = low energy). Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy." +
+      "Color gradient is based on the min, avg, and max energy values of your top 10 songs (purple = high energy, red = low energy)." +
       "\nYour min: " +
       minEnergy +
       " avg: " +
@@ -456,15 +481,14 @@ export default function UserStats() {
       audioFeatures.map((item) => item.loudness)
     ).toFixed(2);
     const opacity =
-      " Cheek opacity is based on the average loudness of your top 10 songs (solid = louder). Loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks. Loudness is the quality of a sound that is the primary psychological correlate of physical strength (amplitude). Values typically range between -60 and 0 db. Your average song loudness: " +
-      averageOpacity +
-      "dB.";
+      " Opacity is based on the average loudness of your top 10 songs (solid = louder). Your average song loudness: " +
+      -1 * averageOpacity;
 
     let averageKey = average(audioFeatures.map((item) => item.valence)).toFixed(
       2
     );
     const catColor =
-      "The color of your cat is based on the average valence of your top ten songs, the lighter your cat is the higher your average valence is. Valence describes the musical positiveness conveyed by a track. High valence tracks sound more positive while tracks with low valence sound more negative." +
+      "The color of your cat is based on the average valence of your top ten songs. Valence describes the musical positiveness conveyed by a track. High valence tracks sound more positive while tracks with low valence sound more negative." +
       " \nYour average song valence: " +
       averageKey;
 
@@ -472,7 +496,7 @@ export default function UserStats() {
       audioFeatures.map((item) => item.valence)
     ).toFixed(2);
     const tongue =
-      "The animation speed is based on the average tempo of your top 10 songs (higher bpm = faster animation). The overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration. \nYour average song tempo: " +
+      "The animation speed is based on the average tempo of your top 10 songs (higher bpm = faster animation). \nYour average song tempo: " +
       averageTempo;
 
     let averageDanceability = average(
@@ -534,6 +558,7 @@ export default function UserStats() {
     if (audioFeatures.length) {
       const containerCss = {
         background: computeBackgroundColor(),
+        opacity: computeBackgroundOpacity(),
       };
       const headCss = {
         borderRadius: "50%",
@@ -541,6 +566,8 @@ export default function UserStats() {
         height: "200px",
         margin: "100px auto",
         backgroundColor: computeCatColor(),
+        position: "absolute",
+        left: "35%"
       };
       const leftEarCss = {
         width: 0,
@@ -548,9 +575,10 @@ export default function UserStats() {
         borderLeft: "30px solid transparent",
         borderRight: "30px solid transparent",
         borderTop: "50px solid " + computeCatColor(),
-        position: "relative",
-        top: "-9%",
-        left: "-5%",
+        borderRadius: "8px",
+        position: "absolute",
+        top: "15%",
+        left: "-10%",
         display: "inline-block",
         animation:
           "ear-animation infinite " + computeEarAnimationSpeed() + "s both",
@@ -561,42 +589,18 @@ export default function UserStats() {
         borderLeft: "30px solid transparent",
         borderRight: "30px solid transparent",
         borderTop: "50px solid " + computeCatColor(),
-        position: "relative",
-        top: "-9%",
-        left: "45%",
+        borderRadius: "8px",
+        position: "absolute",
+        top: "15%",
+        left: "80%",
         display: "inline-block",
         animation:
           "ear-animation infinite " + computeEarAnimationSpeed() + "s both",
       };
-
-      const leftCheekCss = {
-        width: "30px",
-        height: "22px",
-        borderRadius: "50%",
-        position: "relative",
-        top: "55%",
-        left: "-2%",
-        display: "inline-block",
-        margin: "0px",
-        opacity: computeCheeksOpacity(),
-        backgroundColor: "#ff85a1",
-      };
-      const rightCheekCss = {
-        width: "30px",
-        height: "22px",
-        borderRadius: "50%",
-        position: "relative",
-        top: "55%",
-        left: "45%",
-        display: "inline-block",
-        margin: "0px",
-        opacity: computeCheeksOpacity(),
-        backgroundColor: "#ff85a1",
-      };
       const tongueCss = {
-        position: "relative",
-        top: "35%",
-        left: "47%",
+        position: "absolute",
+        top: "80%",
+        left: "45%",
         width: "20px",
         height: "20px",
         backgroundColor: "#ffb4a2",
@@ -611,32 +615,32 @@ export default function UserStats() {
         backgroundColor: "black",
         height: "1px",
         width: computeWhiskerLength(),
-        position: "relative",
-        top: "20%",
-        left: "-20%",
+        position: "absolute",
+        top: "65%",
+        left: "-23%",
       };
       const whisker2 = {
         backgroundColor: "black",
         height: "1px",
         width: computeWhiskerLength(),
-        position: "relative",
-        top: "25%",
+        position: "absolute",
+        top: "70%",
         left: "-20%",
       };
       const whisker3 = {
         backgroundColor: "black",
         height: "1px",
         width: computeWhiskerLength(),
-        position: "relative",
-        top: "17%",
+        position: "absolute",
+        top: "65%",
         left: "90%",
       };
       const whisker4 = {
         backgroundColor: "black",
         height: "1px",
         width: computeWhiskerLength(),
-        position: "relative",
-        top: "22%",
+        position: "absolute",
+        top: "70%",
         left: "87%",
       };
 
@@ -654,8 +658,8 @@ export default function UserStats() {
           <div id="head" style={headCss}>
             <div id="left-eye" />
             <div id="right-eye" />
-            <div id="left-cheek" style={leftCheekCss} />
-            <div id="right-cheek" style={rightCheekCss} />
+            <div id="left-cheek" />
+            <div id="right-cheek" />
             <div id="nose" />
 
             <div id="left-ear" style={leftEarCss} />
