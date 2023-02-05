@@ -89,6 +89,7 @@ export default function UserStats() {
     }
     #cat-container {
       min-height: 800px;
+      min-width: 300px;
       width: 100%;
       height: 100%;
       margin: 0px;
