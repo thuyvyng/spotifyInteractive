@@ -471,9 +471,9 @@ export default function UserStats() {
       " \nYour average song valence: " +
       averageKey;
 
-    let averageTempo = average(
-      audioFeatures.map((item) => item.valence)
-    ).toFixed(2);
+    let averageTempo = average(audioFeatures.map((item) => item.tempo)).toFixed(
+      2
+    );
     const tongue =
       "The animation speed is based on the average tempo of your top 10 songs (higher bpm = faster animation). The overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration. \nYour average song tempo: " +
       averageTempo;
