@@ -326,16 +326,22 @@ function Developers() {
             <Developer />
           </Route>
           <Route exact path={path}>
-            <Row>
-              <Col></Col>
-              <Col xs={10}>
-                <CardDeck>
-                  <DevCard dev="anita" />
-                  <DevCard dev="thuyvy" />
-                </CardDeck>
-              </Col>
-              <Col></Col>
-            </Row>
+            {loggedIn ? (
+              <Row>
+                <Col></Col>
+                <Col xs={10}>
+                  <CardDeck>
+                    <DevCard dev="anita" />
+                    <DevCard dev="thuyvy" />
+                  </CardDeck>
+                </Col>
+                <Col></Col>
+              </Row>
+            ) : (
+              <>
+                <Login />
+              </>
+            )}
           </Route>
         </Switch>
       </Container>
