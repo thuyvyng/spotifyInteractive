@@ -22,13 +22,8 @@ function DevCard(props) {
   });
 
   const [spotifySrc, setSpotify] = useState({
-    thuyvy: "Thuy-Vy",
-    anita: "anitasmith98",
-  });
-
-  const [nameSrc, setName] = useState({
     thuyvy: "tweetynguy",
-    anita: "Anita",
+    anita: "anitasmith98",
   });
 
   const [githubSrc, setGithubSrc] = useState({
