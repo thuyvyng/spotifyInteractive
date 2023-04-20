@@ -217,7 +217,8 @@ export default function UserStats() {
       const url = `https://api.spotify.com/v1/audio-features?ids=${trackIds}`;
       let result = await get(url, { access_token: auth.accessToken });
       // console.log("fetch audio features:", result.audio_features);
-      setAudioFeatures(result.audio_features || {});
+      let AF = result.audio_features.map((x) => x).filter((x) => x != null);
+      setAudioFeatures(AF || {});
     } catch (e) {
       if (e instanceof DOMException) {
         console.log("HTTP Request Aborted");
