@@ -686,7 +686,7 @@ export default function UserStats() {
       <ButtonGroup>
         <OverlayTrigger
           placement="bottom"
-          overlay={explanationTooltip("The last 4 weeks")}
+          overlay={explanationTooltip("Last 4 weeks")}
         >
           <Button
             className={
@@ -701,7 +701,7 @@ export default function UserStats() {
         </OverlayTrigger>
         <OverlayTrigger
           placement="bottom"
-          overlay={explanationTooltip("The last 6 months")}
+          overlay={explanationTooltip("Last 6 months")}
         >
           <Button
             className={
@@ -716,7 +716,7 @@ export default function UserStats() {
         </OverlayTrigger>
         <OverlayTrigger
           placement="bottom"
-          overlay={explanationTooltip("All data")}
+          overlay={explanationTooltip("Last year")}
         >
           <Button
             className={dataTimeframe === "long_term" ? "active-button" : "card"}
