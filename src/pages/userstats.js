@@ -5,7 +5,6 @@ import {
   Col,
   Card,
   Tooltip,
-  OverlayTrigger,
   Button,
   ButtonGroup,
   Jumbotron,
@@ -52,7 +51,6 @@ export default function UserStats() {
     }
 
     .card {
-      background-color: #e7f2f8;
       height: 100%;
       width: 100%;
       text-align: left;
@@ -211,7 +209,7 @@ export default function UserStats() {
   }, [loggedIn, dataTimeframe]);
 
   useEffect(() => {
-    if (topTracks !== {}) fetchAudioFeatures();
+    if (topTracks) fetchAudioFeatures();
   }, [topTracks]);
 
   async function fetchspotifyuser() {
@@ -700,50 +698,32 @@ export default function UserStats() {
 
   function displayTimeframeButtons() {
     return (
-      <ButtonGroup>
-        <OverlayTrigger
-          placement="bottom"
-          overlay={explanationTooltip("Last 4 weeks")}
+      <ButtonGroup size="sm">
+        <Button
+          className={dataTimeframe === "short_term" ? "active-button" : "card"}
+          onClick={() => {
+            setDataTimeframe("short_term");
+          }}
         >
-          <Button
-            className={
-              dataTimeframe === "short_term" ? "active-button" : "card"
-            }
-            onClick={() => {
-              setDataTimeframe("short_term");
-            }}
-          >
-            <h6 className="centered">Short </h6>
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger
-          placement="bottom"
-          overlay={explanationTooltip("Last 6 months")}
+          <h6 className="centered"> Month </h6>
+        </Button>
+        <Button
+          className={dataTimeframe === "medium_term" ? "active-button" : "card"}
+          onClick={() => {
+            setDataTimeframe("medium_term");
+          }}
         >
-          <Button
-            className={
-              dataTimeframe === "medium_term" ? "active-button" : "card"
-            }
-            onClick={() => {
-              setDataTimeframe("medium_term");
-            }}
-          >
-            <h6 className="centered">Medium </h6>
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger
-          placement="bottom"
-          overlay={explanationTooltip("Last year")}
+          <h6 className="centered">6 Months </h6>
+        </Button>
+
+        <Button
+          className={dataTimeframe === "long_term" ? "active-button" : "card"}
+          onClick={() => {
+            setDataTimeframe("long_term");
+          }}
         >
-          <Button
-            className={dataTimeframe === "long_term" ? "active-button" : "card"}
-            onClick={() => {
-              setDataTimeframe("long_term");
-            }}
-          >
-            <h6 className="centered">Long</h6>
-          </Button>
-        </OverlayTrigger>
+          <h6 className="centered"> Year</h6>
+        </Button>
       </ButtonGroup>
     );
   }
@@ -751,56 +731,40 @@ export default function UserStats() {
   return (
     <>
       <Navigation />
-
-      <Row css={styles}>
-        <Col style={{ backgroundColor: "white" }}>
-          {loggedIn ? (
-            displayCatVis()
-          ) : (
-            <>
-              <Jumbotron>
-                <h1 class="display-3">Your Purrsona</h1>
-                <p class="lead">
-                  Have a cat visualization created based on your spotify data!
-                </p>
-              </Jumbotron>
-            </>
-          )}
-        </Col>
-        <Col>
-          {loggedIn ? (
-            <>
-              <Row>{catVisTooltips()}</Row>
-              <Row>
-                <Col>
-                  <h4 className="centered"> Top Songs </h4>
-                  <ul className="cards-container">
-                    {topTracks !== {} ? (
-                      displayTopTracks()
-                    ) : (
-                      <p>Loading top tracks...</p>
-                    )}
-                  </ul>
-                </Col>
-                <Col>
-                  <h4 className="centered"> Top Artists </h4>
-                  <ul className="cards-container">
-                    {topArtists !== {} ? (
-                      displayTopArtists()
-                    ) : (
-                      <p>Loading top artists...</p>
-                    )}
-                  </ul>
-                </Col>
-              </Row>
-            </>
-          ) : (
-            <>
-              <Login />
-            </>
-          )}
-        </Col>
-      </Row>
+      {loggedIn ? (
+        <Row css={styles}>
+          <Col>{displayCatVis()}</Col>
+          <Col>
+            <Row>{catVisTooltips()}</Row>
+            <Row>
+              <Col>
+                <h4 className="centered"> Top Songs </h4>
+                <ul className="cards-container">
+                  {topTracks ? (
+                    displayTopTracks()
+                  ) : (
+                    <p>Loading top tracks...</p>
+                  )}
+                </ul>
+              </Col>
+              <Col>
+                <h4 className="centered"> Top Artists </h4>
+                <ul className="cards-container">
+                  {topArtists ? (
+                    displayTopArtists()
+                  ) : (
+                    <p>Loading top artists...</p>
+                  )}
+                </ul>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      ) : (
+        <>
+          <Login />
+        </>
+      )}
     </>
   );
 }
