@@ -194,6 +194,8 @@ export default function UserStats() {
   const [audioFeatures, setAudioFeatures] = useState({});
   const [dataTimeframe, setDataTimeframe] = useState("short_term");
 
+  const [user, setUser] = useState({});
+
   const auth = useSelector(getAuth);
   const loggedIn = auth.loggedIn;
 
@@ -202,6 +204,7 @@ export default function UserStats() {
     if (loggedIn) {
       fetchTopArtists();
       fetchTopTracks();
+      fetchspotifyuser();
     } else {
       console.log("not logged in!");
     }
@@ -210,6 +213,20 @@ export default function UserStats() {
   useEffect(() => {
     if (topTracks !== {}) fetchAudioFeatures();
   }, [topTracks]);
+
+  async function fetchspotifyuser() {
+    try {
+      const url = `https://api.spotify.com/v1/me`;
+      const result = await get(url, { access_token: auth.accessToken });
+      console.log("fetch spotify user result:", result);
+      setUser(result || {});
+    } catch (e) {
+      if (e instanceof DOMException) {
+        console.log("HTTP Request Aborted");
+      }
+      console.log("error fetching user", e);
+    }
+  }
 
   async function fetchAudioFeatures() {
     try {
@@ -650,7 +667,7 @@ export default function UserStats() {
       return (
         <div id="cat-container" style={containerCss}>
           <Jumbotron>
-            <h1 class="display-4">Your Purrsona</h1>
+            <h1 class="display-4">{user.display_name}'s Purrsona</h1>
             <p class="lead">
               Have a cat visualization created based on your spotify data!
             </p>
@@ -686,7 +703,7 @@ export default function UserStats() {
       <ButtonGroup>
         <OverlayTrigger
           placement="bottom"
-          overlay={explanationTooltip("The last 4 weeks")}
+          overlay={explanationTooltip("Last 4 weeks")}
         >
           <Button
             className={
@@ -701,7 +718,7 @@ export default function UserStats() {
         </OverlayTrigger>
         <OverlayTrigger
           placement="bottom"
-          overlay={explanationTooltip("The last 6 months")}
+          overlay={explanationTooltip("Last 6 months")}
         >
           <Button
             className={
@@ -716,7 +733,7 @@ export default function UserStats() {
         </OverlayTrigger>
         <OverlayTrigger
           placement="bottom"
-          overlay={explanationTooltip("All data")}
+          overlay={explanationTooltip("Last year")}
         >
           <Button
             className={dataTimeframe === "long_term" ? "active-button" : "card"}
