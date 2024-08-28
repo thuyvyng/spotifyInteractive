@@ -1,16 +1,6 @@
 /**@jsxImportSource @emotion/react */
 import Navigation from "../components/navbar";
-import {
-  Row,
-  Col,
-  Card,
-  Tooltip,
-  Button,
-  ButtonGroup,
-  Jumbotron,
-  Tabs,
-  Tab,
-} from "react-bootstrap";
+import { Row, Col, Card, Tooltip, Jumbotron, Tabs, Tab } from "react-bootstrap";
 import { css } from "@emotion/react";
 import { useSelector } from "react-redux";
 import { getAuth } from "../redux/selectors";
@@ -305,11 +295,11 @@ export default function UserStats() {
 
   function playMusic(song) {
     let s = new Audio(song.preview_url);
-    if (isEqual(songPlaying.src, s.src) == true) {
+    if (isEqual(songPlaying.src, s.src) === true) {
       songPlaying.pause();
       setSongPlaying({});
       return;
-    } else if (isEqual(songPlaying, {}) == false) {
+    } else if (isEqual(songPlaying, {}) === false) {
       songPlaying.pause();
       setSongPlaying({});
     }
@@ -437,14 +427,9 @@ export default function UserStats() {
     return lengths[index];
   }
 
-  function explanationTooltip(explanation) {
-    return <Tooltip>{explanation}</Tooltip>;
-  }
-
   function catVisTooltips() {
     const tooltipTitles = [
-      "*",
-      "Background Colors",
+      "Background",
       "Cheeks",
       "Color",
       "Tongue",
@@ -460,10 +445,8 @@ export default function UserStats() {
     let minEnergy = Math.min(...energyArray).toFixed(2);
     let maxEnergy = Math.max(...energyArray).toFixed(2);
 
-    const home =
-      "Curious about your cat? Learn more by clicking the attributes. ";
     const background =
-      "Color gradient is based on the min, avg, and max energy values of your top 10 songs (purple = high energy, red = low energy). Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy." +
+      "Color gradient is based on the min, avg, and max energy values of your top 10 songs (purple = high, red = low). Energy is measured from 0.0 to 1.0 and represents intensity and activity. Typically, energetic tracks feel fast, loud, and noisy." +
       "\nYour min: " +
       minEnergy +
       " avg: " +
@@ -475,7 +458,7 @@ export default function UserStats() {
       audioFeatures.map((item) => item.loudness)
     ).toFixed(2);
     const opacity =
-      " Cheek opacity is based on the average loudness of your top 10 songs (solid = louder). Loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks. Loudness is the quality of a sound that is the primary psychological correlate of physical strength (amplitude). Values typically range between -60 and 0 db. Your average song loudness: " +
+      "Cheek opacity is based on the average loudness of your top 10 songs (solid = louder). Values typically range between -60 (quieter) and 0 db (louder). Your average song loudness: " +
       averageOpacity +
       "dB.";
 
@@ -483,7 +466,7 @@ export default function UserStats() {
       2
     );
     const catColor =
-      "The color of your cat is based on the average valence of your top ten songs, the lighter your cat is the higher your average valence is. Valence describes the musical positiveness conveyed by a track. High valence tracks sound more positive while tracks with low valence sound more negative." +
+      "The color of your cat is based on the valence of your top ten songs, valence describes the musical positiveness conveyed by a track and range from 0.0 -> 1.0. High valence tracks sound more positive while tracks with low valence sound more negative. The lighter your cat, the higher the valence value." +
       " \nYour average song valence: " +
       averageKey;
 
@@ -510,7 +493,6 @@ export default function UserStats() {
       averageDuration +
       " seconds";
     const explanations = [
-      home,
       background,
       opacity,
       catColor,
@@ -528,8 +510,10 @@ export default function UserStats() {
           borderRadius: "20px",
         }}
       >
-        <h4> Cat Characteristics </h4>
-
+        <h5> Cat Characteristics </h5>
+        <p>Select a time frame to see how your music taste changes!</p>
+        {displayTimeframe()}
+        <br></br>
         <br></br>
 
         <Tabs>
@@ -669,8 +653,6 @@ export default function UserStats() {
             <p class="lead">
               Have a cat visualization created based on your spotify data!
             </p>
-            <p>Select a time frame to see how your music taste has changed</p>
-            {displayTimeframeButtons()}
           </Jumbotron>
 
           <div id="head" style={headCss}>
@@ -696,35 +678,16 @@ export default function UserStats() {
     return <p>Loading cat visualization...</p>;
   }
 
-  function displayTimeframeButtons() {
+  function displayTimeframe() {
     return (
-      <ButtonGroup size="sm">
-        <Button
-          className={dataTimeframe === "short_term" ? "active-button" : "card"}
-          onClick={() => {
-            setDataTimeframe("short_term");
-          }}
-        >
-          <h6 className="centered"> Month </h6>
-        </Button>
-        <Button
-          className={dataTimeframe === "medium_term" ? "active-button" : "card"}
-          onClick={() => {
-            setDataTimeframe("medium_term");
-          }}
-        >
-          <h6 className="centered">6 Months </h6>
-        </Button>
-
-        <Button
-          className={dataTimeframe === "long_term" ? "active-button" : "card"}
-          onClick={() => {
-            setDataTimeframe("long_term");
-          }}
-        >
-          <h6 className="centered"> Year</h6>
-        </Button>
-      </ButtonGroup>
+      <select
+        defaultValue={["medium_term"]}
+        onChange={(e) => setDataTimeframe(e.target.value)}
+      >
+        <option value="short_term">Last Month</option>
+        <option value="medium_term">Last 6 Months</option>
+        <option value="long_term">Last 12 Months</option>
+      </select>
     );
   }
 
