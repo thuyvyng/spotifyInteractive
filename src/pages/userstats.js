@@ -357,6 +357,7 @@ export default function UserStats() {
   // now returning a gradient from lowest to average to highest energy colors
   function computeBackgroundColor() {
     const colors = [
+      "#ff83e7",
       "#e0218a",
       "#F94144",
       "#F8961E",
@@ -367,12 +368,13 @@ export default function UserStats() {
       "#00AFB9",
       "#0077B6",
       "#8E7DBE",
+      "#001489",
     ];
 
     let energyArray = audioFeatures.map((item) => item.energy);
-    let averageIndex = Math.round(9 * average(energyArray));
-    let lowestIndex = Math.round(9 * Math.min(...energyArray));
-    let highestIndex = Math.round(9 * Math.max(...energyArray));
+    let averageIndex = Math.round(11 * average(energyArray));
+    let lowestIndex = Math.round(11 * Math.min(...energyArray));
+    let highestIndex = Math.round(11 * Math.max(...energyArray));
     let gradient =
       "linear-gradient(120deg, " +
       colors[lowestIndex] +
