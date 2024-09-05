@@ -9,8 +9,8 @@ function Login() {
   return (
     <div>
       <SpotifyAuth
-        redirectUri="http://localhost:3000/redirect"
-        clientID={"164e3321d4714ea2b1d88976aeecb258"}
+        redirectUri="https://unpawsthemusic.vercel.app/redirect"
+        clientID={process.env.REACT_APP_API_KEY}
         scopes={scopes}
         title="Login into Spotify"
       />
