@@ -15,7 +15,7 @@ export default function UserStats() {
       color: black;
     }
     h4 {
-      margin: 1%;
+      color: white;
     }
 
     h6 {
@@ -45,6 +45,7 @@ export default function UserStats() {
       width: 100%;
       text-align: left;
       color: black;
+      background: rgba(0, 0, 0, 0.1);
     }
 
     .cardImgArtist {
@@ -68,13 +69,7 @@ export default function UserStats() {
       text-align: center;
       justify-content: center;
     }
-    .active-button {
-      background-color: #84a59d;
-      height: 100%;
-      width: 100%;
-      text-align: center;
-      color: white;
-    }
+
     #cat-container {
       min-height: 800px;
       min-width: 300px;
@@ -178,6 +173,9 @@ export default function UserStats() {
   const [topArtists, setTopArtists] = useState({});
   const [topTracks, setTopTracks] = useState({});
   const [songPlaying, setSongPlaying] = useState({});
+  const [backgroundCol, setBackgroundColor] = useState(
+    "linear-gradient(90deg, #F8961E, #00AFB9, #8E7DBE)"
+  );
 
   const [audioFeatures, setAudioFeatures] = useState({});
   const [dataTimeframe, setDataTimeframe] = useState("short_term");
@@ -224,6 +222,7 @@ export default function UserStats() {
       // console.log("fetch audio features:", result.audio_features);
       let AF = result.audio_features.map((x) => x).filter((x) => x != null);
       setAudioFeatures(AF || {});
+      setBackgroundColor(computeBackgroundColor());
     } catch (e) {
       if (e instanceof DOMException) {
         console.log("HTTP Request Aborted");
@@ -270,6 +269,7 @@ export default function UserStats() {
               <div>
                 <img
                   className="cardImgArtist"
+                  alt="artist"
                   src={
                     artist.images &&
                     artist.images.length >= 1 &&
@@ -337,7 +337,7 @@ export default function UserStats() {
                       rel="noreferrer"
                     >
                       <h6>{song.name} </h6>
-                      by {song.artists[0].name}
+                      {song.artists[0].name}
                     </a>
                   </div>
                 </Card>
@@ -378,6 +378,8 @@ export default function UserStats() {
       ", " +
       colors[highestIndex] +
       ")";
+
+    console.log(gradient);
     return gradient;
   }
 
@@ -502,42 +504,42 @@ export default function UserStats() {
     ];
 
     return (
-      <div
+      <Jumbotron
         style={{
-          margin: "10px",
-          padding: "15px",
-          border: "1px solid #d3d3d3",
-          borderRadius: "20px",
+          background: " rgba(0, 0, 0, 0.1)",
+          margin: "0px",
+          paddingTop: "15px",
+          paddingBottom: "15px",
         }}
       >
-        <h5> Cat Characteristics </h5>
-        <p>Select a time frame to see how your music taste changes!</p>
-        {displayTimeframe()}
-        <br></br>
-        <br></br>
-
-        <Tabs>
-          {tooltipTitles.map((title, i) => {
-            return (
-              <Tab
-                eventKey={title}
-                title={title}
-                style={{ paddingTop: "10px" }}
-              >
-                <blockquote>{explanations[i]}</blockquote>
-              </Tab>
-            );
-          })}
-        </Tabs>
-      </div>
+        <Row>
+          <Col xs={{ order: 1, span: 12 }} md={{ order: 1, span: 3 }}>
+            <h4 style={{ color: "white" }}> Cat Characteristics </h4>
+            <p>Select a time frame to see how your music taste changes!</p>
+            {displayTimeframe()}
+          </Col>
+          <Col xs={{ order: 2, span: 12 }} md={{ order: 1, span: 9 }}>
+            <Tabs className="tabs">
+              {tooltipTitles.map((title, i) => {
+                return (
+                  <Tab
+                    eventKey={title}
+                    title={title}
+                    style={{ paddingTop: "10px" }}
+                  >
+                    <blockquote>{explanations[i]}</blockquote>
+                  </Tab>
+                );
+              })}
+            </Tabs>
+          </Col>
+        </Row>
+      </Jumbotron>
     );
   }
 
   function displayCatVis() {
     if (audioFeatures.length) {
-      const containerCss = {
-        background: computeBackgroundColor(),
-      };
       const headCss = {
         borderRadius: "50%",
         width: "200px",
@@ -647,13 +649,13 @@ export default function UserStats() {
       };
 
       return (
-        <div id="cat-container" style={containerCss}>
-          <Jumbotron>
+        <div id="cat-container">
+          <div className="centered">
             <h1 class="display-4">{user.display_name}'s Purrsona</h1>
             <p class="lead">
               Have a cat visualization created based on your spotify data!
             </p>
-          </Jumbotron>
+          </div>
 
           <div id="head" style={headCss}>
             <div id="left-eye" />
@@ -692,42 +694,41 @@ export default function UserStats() {
   }
 
   return (
-    <>
+    <div style={{ background: backgroundCol }} css={styles}>
       <Navigation />
       {loggedIn ? (
-        <Row css={styles}>
-          <Col>{displayCatVis()}</Col>
-          <Col>
-            <Row>{catVisTooltips()}</Row>
-            <Row>
-              <Col>
-                <h4 className="centered"> Top Songs </h4>
-                <ul className="cards-container">
-                  {topTracks ? (
-                    displayTopTracks()
-                  ) : (
-                    <p>Loading top tracks...</p>
-                  )}
-                </ul>
-              </Col>
-              <Col>
-                <h4 className="centered"> Top Artists </h4>
-                <ul className="cards-container">
-                  {topArtists ? (
-                    displayTopArtists()
-                  ) : (
-                    <p>Loading top artists...</p>
-                  )}
-                </ul>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+        <>
+          <Row>
+            <Col xs={{ order: 2, span: 12 }} md={{ span: 3, order: 2 }}>
+              <br></br>
+              <h4 className="centered"> Top Songs </h4>
+              <ul className="cards-container">
+                {topTracks ? displayTopTracks() : <p>Loading top tracks...</p>}
+              </ul>
+            </Col>
+            <Col xs={{ order: 1, span: 12 }} md={{ span: 6, order: 2 }}>
+              {displayCatVis()}
+            </Col>
+            <Col xs={{ order: 2, span: 12 }} md={{ span: 3, order: 2 }}>
+              <br></br>
+
+              <h4 className="centered"> Top Artists </h4>
+              <ul className="cards-container">
+                {topArtists ? (
+                  displayTopArtists()
+                ) : (
+                  <p>Loading top artists...</p>
+                )}
+              </ul>
+            </Col>
+          </Row>
+          {catVisTooltips()}
+        </>
       ) : (
         <>
           <Login />
         </>
       )}
-    </>
+    </div>
   );
 }
