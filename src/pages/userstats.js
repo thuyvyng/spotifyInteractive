@@ -174,7 +174,7 @@ export default function UserStats() {
   const [topTracks, setTopTracks] = useState({});
   const [songPlaying, setSongPlaying] = useState({});
   const [backgroundCol, setBackgroundColor] = useState(
-    "linear-gradient(90deg, #F8961E, #00AFB9, #8E7DBE)"
+    "linear-gradient(120deg, #F8961E, #00AFB9, #8E7DBE)"
   );
 
   const [audioFeatures, setAudioFeatures] = useState({});
@@ -371,7 +371,7 @@ export default function UserStats() {
     let lowestIndex = Math.round(6 * Math.min(...energyArray));
     let highestIndex = Math.round(6 * Math.max(...energyArray));
     let gradient =
-      "linear-gradient(90deg, " +
+      "linear-gradient(120deg, " +
       colors[lowestIndex] +
       ", " +
       colors[averageIndex] +
