@@ -366,15 +366,16 @@ export default function UserStats() {
       "#8ACE00",
       "#55A630",
       "#00AFB9",
+      "#088F8F",
       "#0077B6",
       "#8E7DBE",
       "#001489",
     ];
 
     let energyArray = audioFeatures.map((item) => item.energy);
-    let averageIndex = Math.round(11 * average(energyArray));
-    let lowestIndex = Math.round(11 * Math.min(...energyArray));
-    let highestIndex = Math.round(11 * Math.max(...energyArray));
+    let averageIndex = Math.round(12 * average(energyArray));
+    let lowestIndex = Math.round(12 * Math.min(...energyArray));
+    let highestIndex = Math.round(12 * Math.max(...energyArray));
     let gradient =
       "linear-gradient(120deg, " +
       colors[lowestIndex] +
