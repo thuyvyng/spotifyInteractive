@@ -1,16 +1,6 @@
 /**@jsxImportSource @emotion/react */
 import Navigation from "../components/navbar";
-import {
-  Row,
-  Col,
-  Card,
-  Tooltip,
-  Button,
-  ButtonGroup,
-  Jumbotron,
-  Tabs,
-  Tab,
-} from "react-bootstrap";
+import { Row, Col, Card, Tooltip, Jumbotron, Tabs, Tab } from "react-bootstrap";
 import { css } from "@emotion/react";
 import { useSelector } from "react-redux";
 import { getAuth } from "../redux/selectors";
@@ -25,7 +15,7 @@ export default function UserStats() {
       color: black;
     }
     h4 {
-      margin: 1%;
+      color: white;
     }
 
     h6 {
@@ -55,6 +45,7 @@ export default function UserStats() {
       width: 100%;
       text-align: left;
       color: black;
+      background: rgba(0, 0, 0, 0.1);
     }
 
     .cardImgArtist {
@@ -78,13 +69,7 @@ export default function UserStats() {
       text-align: center;
       justify-content: center;
     }
-    .active-button {
-      background-color: #84a59d;
-      height: 100%;
-      width: 100%;
-      text-align: center;
-      color: white;
-    }
+
     #cat-container {
       min-height: 800px;
       min-width: 300px;
@@ -188,6 +173,9 @@ export default function UserStats() {
   const [topArtists, setTopArtists] = useState({});
   const [topTracks, setTopTracks] = useState({});
   const [songPlaying, setSongPlaying] = useState({});
+  const [backgroundCol, setBackgroundColor] = useState(
+    "linear-gradient(120deg, #F8961E, #00AFB9, #8E7DBE)"
+  );
 
   const [audioFeatures, setAudioFeatures] = useState({});
   const [dataTimeframe, setDataTimeframe] = useState("short_term");
@@ -234,6 +222,7 @@ export default function UserStats() {
       // console.log("fetch audio features:", result.audio_features);
       let AF = result.audio_features.map((x) => x).filter((x) => x != null);
       setAudioFeatures(AF || {});
+      setBackgroundColor(computeBackgroundColor());
     } catch (e) {
       if (e instanceof DOMException) {
         console.log("HTTP Request Aborted");
@@ -280,6 +269,7 @@ export default function UserStats() {
               <div>
                 <img
                   className="cardImgArtist"
+                  alt="artist"
                   src={
                     artist.images &&
                     artist.images.length >= 1 &&
@@ -305,11 +295,11 @@ export default function UserStats() {
 
   function playMusic(song) {
     let s = new Audio(song.preview_url);
-    if (isEqual(songPlaying.src, s.src) == true) {
+    if (isEqual(songPlaying.src, s.src) === true) {
       songPlaying.pause();
       setSongPlaying({});
       return;
-    } else if (isEqual(songPlaying, {}) == false) {
+    } else if (isEqual(songPlaying, {}) === false) {
       songPlaying.pause();
       setSongPlaying({});
     }
@@ -347,7 +337,7 @@ export default function UserStats() {
                       rel="noreferrer"
                     >
                       <h6>{song.name} </h6>
-                      by {song.artists[0].name}
+                      {song.artists[0].name}
                     </a>
                   </div>
                 </Card>
@@ -367,27 +357,35 @@ export default function UserStats() {
   // now returning a gradient from lowest to average to highest energy colors
   function computeBackgroundColor() {
     const colors = [
+      "#ff83e7",
+      "#e0218a",
       "#F94144",
       "#F8961E",
       "#F9C74F",
+      "#f0f3a2",
+      "#8ACE00",
       "#55A630",
       "#00AFB9",
+      "#088F8F",
       "#0077B6",
       "#8E7DBE",
+      "#001489",
     ];
 
     let energyArray = audioFeatures.map((item) => item.energy);
-    let averageIndex = Math.round(6 * average(energyArray));
-    let lowestIndex = Math.round(6 * Math.min(...energyArray));
-    let highestIndex = Math.round(6 * Math.max(...energyArray));
+    let averageIndex = Math.round(12 * average(energyArray));
+    let lowestIndex = Math.round(12 * Math.min(...energyArray));
+    let highestIndex = Math.round(12 * Math.max(...energyArray));
     let gradient =
-      "linear-gradient(90deg, " +
+      "linear-gradient(120deg, " +
       colors[lowestIndex] +
       ", " +
       colors[averageIndex] +
       ", " +
       colors[highestIndex] +
       ")";
+
+    console.log(gradient);
     return gradient;
   }
 
@@ -437,14 +435,9 @@ export default function UserStats() {
     return lengths[index];
   }
 
-  function explanationTooltip(explanation) {
-    return <Tooltip>{explanation}</Tooltip>;
-  }
-
   function catVisTooltips() {
     const tooltipTitles = [
-      "*",
-      "Background Colors",
+      "Background",
       "Cheeks",
       "Color",
       "Tongue",
@@ -460,10 +453,8 @@ export default function UserStats() {
     let minEnergy = Math.min(...energyArray).toFixed(2);
     let maxEnergy = Math.max(...energyArray).toFixed(2);
 
-    const home =
-      "Curious about your cat? Learn more by clicking the attributes. ";
     const background =
-      "Color gradient is based on the min, avg, and max energy values of your top 10 songs (purple = high energy, red = low energy). Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy." +
+      "Color gradient is based on the min, avg, and max energy values of your top 10 songs (purple = high, red = low). Energy is measured from 0.0 to 1.0 and represents intensity and activity. Typically, energetic tracks feel fast, loud, and noisy." +
       "\nYour min: " +
       minEnergy +
       " avg: " +
@@ -475,7 +466,7 @@ export default function UserStats() {
       audioFeatures.map((item) => item.loudness)
     ).toFixed(2);
     const opacity =
-      " Cheek opacity is based on the average loudness of your top 10 songs (solid = louder). Loudness values are averaged across the entire track and are useful for comparing relative loudness of tracks. Loudness is the quality of a sound that is the primary psychological correlate of physical strength (amplitude). Values typically range between -60 and 0 db. Your average song loudness: " +
+      "Cheek opacity is based on the average loudness of your top 10 songs (solid = louder). Values typically range between -60 (quieter) and 0 db (louder). Your average song loudness: " +
       averageOpacity +
       "dB.";
 
@@ -483,7 +474,7 @@ export default function UserStats() {
       2
     );
     const catColor =
-      "The color of your cat is based on the average valence of your top ten songs, the lighter your cat is the higher your average valence is. Valence describes the musical positiveness conveyed by a track. High valence tracks sound more positive while tracks with low valence sound more negative." +
+      "The color of your cat is based on the valence of your top ten songs, valence describes the musical positiveness conveyed by a track and range from 0.0 -> 1.0. High valence tracks sound more positive while tracks with low valence sound more negative. The lighter your cat, the higher the valence value." +
       " \nYour average song valence: " +
       averageKey;
 
@@ -510,7 +501,6 @@ export default function UserStats() {
       averageDuration +
       " seconds";
     const explanations = [
-      home,
       background,
       opacity,
       catColor,
@@ -520,40 +510,42 @@ export default function UserStats() {
     ];
 
     return (
-      <div
+      <Jumbotron
         style={{
-          margin: "10px",
-          padding: "15px",
-          border: "1px solid #d3d3d3",
-          borderRadius: "20px",
+          background: " rgba(0, 0, 0, 0.1)",
+          margin: "0px",
+          paddingTop: "15px",
+          paddingBottom: "15px",
         }}
       >
-        <h4> Cat Characteristics </h4>
-
-        <br></br>
-
-        <Tabs>
-          {tooltipTitles.map((title, i) => {
-            return (
-              <Tab
-                eventKey={title}
-                title={title}
-                style={{ paddingTop: "10px" }}
-              >
-                <blockquote>{explanations[i]}</blockquote>
-              </Tab>
-            );
-          })}
-        </Tabs>
-      </div>
+        <Row>
+          <Col xs={{ order: 1, span: 12 }} md={{ order: 1, span: 3 }}>
+            <h4 style={{ color: "white" }}> Cat Characteristics </h4>
+            <p>Select a time frame to see how your music taste changes!</p>
+            {displayTimeframe()}
+          </Col>
+          <Col xs={{ order: 2, span: 12 }} md={{ order: 1, span: 9 }}>
+            <Tabs className="tabs">
+              {tooltipTitles.map((title, i) => {
+                return (
+                  <Tab
+                    eventKey={title}
+                    title={title}
+                    style={{ paddingTop: "10px" }}
+                  >
+                    <blockquote>{explanations[i]}</blockquote>
+                  </Tab>
+                );
+              })}
+            </Tabs>
+          </Col>
+        </Row>
+      </Jumbotron>
     );
   }
 
   function displayCatVis() {
     if (audioFeatures.length) {
-      const containerCss = {
-        background: computeBackgroundColor(),
-      };
       const headCss = {
         borderRadius: "50%",
         width: "200px",
@@ -663,15 +655,13 @@ export default function UserStats() {
       };
 
       return (
-        <div id="cat-container" style={containerCss}>
-          <Jumbotron>
+        <div id="cat-container">
+          <div className="centered">
             <h1 class="display-4">{user.display_name}'s Purrsona</h1>
             <p class="lead">
               Have a cat visualization created based on your spotify data!
             </p>
-            <p>Select a time frame to see how your music taste has changed</p>
-            {displayTimeframeButtons()}
-          </Jumbotron>
+          </div>
 
           <div id="head" style={headCss}>
             <div id="left-eye" />
@@ -696,75 +686,55 @@ export default function UserStats() {
     return <p>Loading cat visualization...</p>;
   }
 
-  function displayTimeframeButtons() {
+  function displayTimeframe() {
     return (
-      <ButtonGroup size="sm">
-        <Button
-          className={dataTimeframe === "short_term" ? "active-button" : "card"}
-          onClick={() => {
-            setDataTimeframe("short_term");
-          }}
-        >
-          <h6 className="centered"> Month </h6>
-        </Button>
-        <Button
-          className={dataTimeframe === "medium_term" ? "active-button" : "card"}
-          onClick={() => {
-            setDataTimeframe("medium_term");
-          }}
-        >
-          <h6 className="centered">6 Months </h6>
-        </Button>
-
-        <Button
-          className={dataTimeframe === "long_term" ? "active-button" : "card"}
-          onClick={() => {
-            setDataTimeframe("long_term");
-          }}
-        >
-          <h6 className="centered"> Year</h6>
-        </Button>
-      </ButtonGroup>
+      <select
+        defaultValue={["medium_term"]}
+        onChange={(e) => setDataTimeframe(e.target.value)}
+      >
+        <option value="short_term">Last Month</option>
+        <option value="medium_term">Last 6 Months</option>
+        <option value="long_term">Last 12 Months</option>
+      </select>
     );
   }
 
   return (
-    <>
+    <div style={{ background: backgroundCol }} css={styles}>
       <Navigation />
       {loggedIn ? (
-        <Row css={styles}>
-          <Col>{displayCatVis()}</Col>
-          <Col>
-            <Row>{catVisTooltips()}</Row>
-            <Row>
-              <Col>
-                <h4 className="centered"> Top Songs </h4>
-                <ul className="cards-container">
-                  {topTracks ? (
-                    displayTopTracks()
-                  ) : (
-                    <p>Loading top tracks...</p>
-                  )}
-                </ul>
-              </Col>
-              <Col>
-                <h4 className="centered"> Top Artists </h4>
-                <ul className="cards-container">
-                  {topArtists ? (
-                    displayTopArtists()
-                  ) : (
-                    <p>Loading top artists...</p>
-                  )}
-                </ul>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+        <>
+          <Row>
+            <Col xs={{ order: 2, span: 12 }} md={{ span: 3, order: 2 }}>
+              <br></br>
+              <h4 className="centered"> Top Songs </h4>
+              <ul className="cards-container">
+                {topTracks ? displayTopTracks() : <p>Loading top tracks...</p>}
+              </ul>
+            </Col>
+            <Col xs={{ order: 1, span: 12 }} md={{ span: 6, order: 2 }}>
+              {displayCatVis()}
+            </Col>
+            <Col xs={{ order: 2, span: 12 }} md={{ span: 3, order: 2 }}>
+              <br></br>
+
+              <h4 className="centered"> Top Artists </h4>
+              <ul className="cards-container">
+                {topArtists ? (
+                  displayTopArtists()
+                ) : (
+                  <p>Loading top artists...</p>
+                )}
+              </ul>
+            </Col>
+          </Row>
+          {catVisTooltips()}
+        </>
       ) : (
         <>
           <Login />
         </>
       )}
-    </>
+    </div>
   );
 }

@@ -39,6 +39,7 @@ export default function Home() {
             <Col>
               <img
                 src="/cat.png"
+                alt="cat pic"
                 style={{
                   width: "100%",
                 }}
