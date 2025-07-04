@@ -278,7 +278,7 @@ function CombinePlaylists() {
     if (loggedIn) {
       fetchMyPlaylists();
     }
-  }, [loggedIn]);
+  });
 
   const changePlaylist1 = (e) => {
     setPlaylists({
