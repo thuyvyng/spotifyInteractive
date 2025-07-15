@@ -47,9 +47,9 @@ export default function Home() {
             </Col>
           </Row>
           <p class="lead">
-            Find out what kind of cat your music tastes create, learn more about
-            your music habits, and combine your playlists with our playlist
-            combiner feature here!
+            Find out what <a href="/userstats">animated cat visualizer (purrsona)</a> your music tastes create, learn more about
+            your music habits, and combine your playlists with our <a href="/combineplaylists">playlist
+            combiner feature</a>!
           </p>
           <a
             href="https://github.com/thuyvyng/spotifyInteractive"

@@ -178,7 +178,7 @@ export default function UserStats() {
   );
 
   const [audioFeatures, setAudioFeatures] = useState({});
-  const [dataTimeframe, setDataTimeframe] = useState("short_term");
+  const [dataTimeframe, setDataTimeframe] = useState("medium_term");
 
   const [user, setUser] = useState({});
 
