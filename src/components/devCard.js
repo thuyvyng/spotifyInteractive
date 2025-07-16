@@ -1,12 +1,9 @@
-import React from "react";
 import { useState, useEffect } from "react";
-
 import { Card, CardGroup } from "react-bootstrap";
 import { get } from "../utils/api";
 import { useSelector } from "react-redux";
 import { getAuth } from "../redux/selectors";
 import { Redirect } from "react-router-dom";
-import { css } from "@emotion/react";
 
 function DevCard(props) {
   const [dev, setDev] = useState([]);
@@ -14,32 +11,32 @@ function DevCard(props) {
   const auth = useSelector(getAuth);
   const loggedIn = auth.loggedIn;
 
-  const [imageSrc, setImageSrc] = useState({
+  const imageSrc = {
     thuyvy:
       "https://tse1.mm.bing.net/th?id=OIP.uW3kFSo4__DcR9zqy-_TDQHaFZ&pid=Api",
     anita:
       "http://3.bp.blogspot.com/--7gtJQo5mHE/UGMKHZapqmI/AAAAAAAAWGU/5X26Pgj_St4/s1600/funny-cat-pictures-017-005.jpg",
-  });
+  };
 
-  const [spotifySrc, setSpotify] = useState({
+  const spotifySrc = {
     thuyvy: "tweetynguy",
     anita: "anitasmith98",
-  });
+  };
 
-  const [githubSrc, setGithubSrc] = useState({
+  const githubSrc = {
     thuyvy: "https://github.com/thuyvyng",
     anita: "https://github.com/ruangroc",
-  });
+  };
 
-  const [linkedinSrc, setLinkedinSrc] = useState({
+  const linkedinSrc = {
     thuyvy: "https://www.linkedin.com/in/thuyvyng/",
     anita: "https://www.linkedin.com/in/anita-ruangrotsakun/",
-  });
+  };
 
-  const [websiteSrc, setWebsiteSrc] = useState({
+  const websiteSrc = {
     thuyvy: "https://thuyvyng.github.io/",
     anita: "https://ruangroc.github.io/",
-  });
+  };
 
   useEffect(() => {
     if (loggedIn) {
@@ -48,7 +45,7 @@ function DevCard(props) {
         fetchPlaylists("tweetynguy");
       } else if (props.dev === "anita") {
         fetchspotifyuser("anitasmith98");
-        fetchPlaylists("anitasmith98");
+        fetchAnitaPlaylists();
       } else {
         return <Redirect to="/error" />;
       }
@@ -85,17 +82,33 @@ function DevCard(props) {
     }
   }
 
+  // Display my pinned playlists instead bc most of my recent playlists aren't relevant
+  async function fetchAnitaPlaylists() {
+    try {
+      const playlistIds = ["0yKKQOnLrVshRTbPBXg0gm", "5YqBGh9cLkDPc2oRuZ6fu4", "5J9Nn1fNHqFn8ZqM1URvxB", "0aCRXAZCIleX5Nym16C2sm"];
+      const playlists = [];
+      for (const id of playlistIds) {
+        const url = `https://api.spotify.com/v1/playlists/${id}`;
+        const result = await get(url, { access_token: auth.accessToken });
+        playlists.push(result);
+      }
+      setDevPlaylists(playlists || []);
+    } catch (e) {
+      if (e instanceof DOMException) {
+        console.log("HTTP Request Aborted");
+      }
+      console.log("error fetching playlists", e);
+    }
+  }
+
+  function displayName(user) {
+    if (user === "thuyvy")
+      return "ThuyVy Nguyen"
+    else
+      return "Anita Ruangrotsakun"
+  }
+
   function displayPlaylists() {
-    const styles = css`
-      a {
-        color: black;
-      }
-
-      .card {
-        margin: auto;
-      }
-    `;
-
     return devPlaylists.map((item) => {
       return (
         <Card>
@@ -119,7 +132,7 @@ function DevCard(props) {
     });
   }
   return (
-    <Card>
+    <Card style={{ "margin-bottom": "20px" }}>
       <Card.Body>
         <a
           href={`https://open.spotify.com/user/${spotifySrc[props.dev]}`}
@@ -127,7 +140,7 @@ function DevCard(props) {
           rel="noreferrer"
         >
           <Card.Title>
-            <h3> {dev.display_name} </h3>
+            <h3> {displayName(props.dev)} </h3>
           </Card.Title>
           <Card.Img
             src={
@@ -141,8 +154,8 @@ function DevCard(props) {
         </a>
         <br></br>
         <br></br>
-        <Card.Subtitle>Playlists</Card.Subtitle>
-        {devPlaylists !== [] ? (
+        <Card.Subtitle style={{ "margin-bottom": "10px" }}>Playlists</Card.Subtitle>
+        {devPlaylists.length ? (
           <CardGroup style={{ width: "80%", margin: "auto" }}>
             {displayPlaylists()}
           </CardGroup>

@@ -1,6 +1,6 @@
 /**@jsxImportSource @emotion/react */
 import Navigation from "../components/navbar";
-import { Row, Col, Card, Tooltip, Jumbotron, Tabs, Tab } from "react-bootstrap";
+import { Row, Col, Card, Jumbotron, Tabs, Tab } from "react-bootstrap";
 import { css } from "@emotion/react";
 import { useSelector } from "react-redux";
 import { getAuth } from "../redux/selectors";
