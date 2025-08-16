@@ -8,13 +8,11 @@ const authInitialState = {
 function authReducer(state = authInitialState, action) {
   switch (action.type) {
     case LOG_IN:
-      console.log("action in reducer: ", action);
       return {
         ...state,
-        accessToken: JSON.parse(action.accessToken).access_token,
+        accessToken: action.accessToken,
         loggedIn: true,
       };
-
     default:
       return state;
   }

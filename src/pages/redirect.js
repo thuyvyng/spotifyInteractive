@@ -1,38 +1,34 @@
-import React, { useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import _ from "lodash";
-import { getParamValues } from "../utils/functions";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logIn } from "../redux/actions";
 import Cookies from "js-cookie";
+import { getAccessTokenFromSpotify } from "../components/login";
 
 function Redirect() {
-  let location = useLocation();
   let history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    try {
-      if (_.isEmpty(location.hash)) {
-        return history.push("/dashboard");
+    async function handleRedirect() {
+      // Redirected from auth to here. Get the authorization code from URL
+      // and exchange auth code for access token
+      const currentToken = await getAccessTokenFromSpotify();
+      if (currentToken && currentToken.access_token) {
+        Cookies.set("spotifyAuthToken", currentToken.access_token, { expires: currentToken.expires_in });
+        const logInAction = logIn(currentToken.access_token);
+        dispatch(logInAction);
       }
-      const access_token = getParamValues(location.hash);
-      console.log(access_token);
 
-      // set Spotify cookie
-      const expiryTime = new Date(
-        new Date().getTime() + access_token.expires_in * 1000
-      );
-      Cookies.set("spotifyAuthToken", access_token, { expires: expiryTime });
+      // Remove code from URL so we can refresh correctly.
+      const url = new URL(window.location.href);
+      url.searchParams.delete("code");
+      const updatedUrl = url.search ? url.href : url.href.replace('?', '');
+      window.history.replaceState({}, document.title, updatedUrl);
 
-      // change state to loggedIn
-      const logInAction = logIn(access_token);
-      dispatch(logInAction);
-
-      history.push("/");
-    } catch (error) {
       history.push("/");
     }
+    handleRedirect();
   });
 
   return <></>;
