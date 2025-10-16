@@ -17,12 +17,14 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const accessToken = Cookies.get("spotifyAuthToken");
-    console.log("token: ", accessToken);
-    if (accessToken !== undefined) {
-      const logInAction = logIn(accessToken);
-      dispatch(logInAction);
+    async function handlePageLoad() {
+      const accessToken = Cookies.get("spotifyAuthToken");
+      if (accessToken !== undefined && accessToken !== 'undefined') {
+        const logInAction = logIn(accessToken);
+        dispatch(logInAction);
+      }
     }
+    handlePageLoad();
   });
 
   return (

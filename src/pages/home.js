@@ -46,26 +46,26 @@ export default function Home() {
               />
             </Col>
           </Row>
-          <p class="lead">
+          <p className="lead">
             Find out what <a href="/userstats">animated cat visualizer (purrsona)</a> your music tastes create, learn more about
             your music habits, and combine your playlists with our <a href="/combineplaylists">playlist
             combiner feature</a>!
           </p>
           <a
             href="https://github.com/thuyvyng/spotifyInteractive"
-            class="badge badge-warning"
+            className="badge badge-warning"
           >
             Github
           </a>{" "}
           <a
             href="https://developer.spotify.com/documentation/web-api/"
-            class="badge badge-warning"
+            className="badge badge-warning"
           >
             SpotifyAPI
           </a>{" "}
           <a
             href="https://open.spotify.com/playlist/4YBShIMxSyiNX4M9q6dcxc?si=3c41c386b6454fcc"
-            class="badge badge-warning"
+            className="badge badge-warning"
           >
             OurSpotifyPlaylist
           </a>

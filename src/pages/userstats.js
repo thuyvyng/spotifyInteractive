@@ -177,7 +177,7 @@ export default function UserStats() {
     "linear-gradient(120deg, #F8961E, #00AFB9, #8E7DBE)"
   );
 
-  const [audioFeatures, setAudioFeatures] = useState({});
+  const [audioFeatures, setAudioFeatures] = useState([]);
   const [dataTimeframe, setDataTimeframe] = useState("medium_term");
 
   const [user, setUser] = useState({});
@@ -186,7 +186,6 @@ export default function UserStats() {
   const loggedIn = auth.loggedIn;
 
   useEffect(() => {
-    // console.log("access token:", auth.accessToken);
     if (loggedIn) {
       fetchTopArtists();
       fetchTopTracks();
@@ -204,7 +203,6 @@ export default function UserStats() {
     try {
       const url = `https://api.spotify.com/v1/me`;
       const result = await get(url, { access_token: auth.accessToken });
-      console.log("fetch spotify user result:", result);
       setUser(result || {});
     } catch (e) {
       if (e instanceof DOMException) {
@@ -216,13 +214,14 @@ export default function UserStats() {
 
   async function fetchAudioFeatures() {
     try {
-      const trackIds = topTracks.items.map((song) => song.id).join();
-      const url = `https://api.spotify.com/v1/audio-features?ids=${trackIds}`;
-      let result = await get(url, { access_token: auth.accessToken });
-      // console.log("fetch audio features:", result.audio_features);
-      let AF = result.audio_features.map((x) => x).filter((x) => x != null);
-      setAudioFeatures(AF || {});
-      setBackgroundColor(computeBackgroundColor());
+      if (topTracks && topTracks.items) {
+        const trackIds = topTracks.items.map((song) => song.id).join();
+        const url = `https://api.spotify.com/v1/audio-features?ids=${trackIds}`;
+        let result = await get(url, { access_token: auth.accessToken });
+        let AF = result.audio_features.map((x) => x).filter((x) => x != null);
+        setAudioFeatures(AF || []);
+        setBackgroundColor(computeBackgroundColor());
+      }
     } catch (e) {
       if (e instanceof DOMException) {
         console.log("HTTP Request Aborted");
@@ -350,7 +349,10 @@ export default function UserStats() {
   }
 
   function average(array) {
-    return array.reduce((a, b) => a + b) / array.length;
+    if (array.length) {
+      return array.reduce((a, b) => a + b) / array.length;
+    }
+    return 0;
   }
 
   // background color ranges from 0.0 to 1.0, will correspond to energy (purple == highest energy)
@@ -385,7 +387,6 @@ export default function UserStats() {
       colors[highestIndex] +
       ")";
 
-    console.log(gradient);
     return gradient;
   }
 
@@ -532,6 +533,7 @@ export default function UserStats() {
                     eventKey={title}
                     title={title}
                     style={{ paddingTop: "10px" }}
+                    key={i}
                   >
                     <blockquote>{explanations[i]}</blockquote>
                   </Tab>
@@ -657,8 +659,8 @@ export default function UserStats() {
       return (
         <div id="cat-container">
           <div className="centered">
-            <h1 class="display-4">{user.display_name}'s Purrsona</h1>
-            <p class="lead">
+            <h1 className="display-4">{user.display_name}'s Purrsona</h1>
+            <p className="lead">
               Have a cat visualization created based on your spotify data!
             </p>
           </div>
@@ -689,7 +691,7 @@ export default function UserStats() {
   function displayTimeframe() {
     return (
       <select
-        defaultValue={["medium_term"]}
+        defaultValue={"medium_term"}
         onChange={(e) => setDataTimeframe(e.target.value)}
       >
         <option value="short_term">Last Month</option>
